@@ -224,11 +224,11 @@ action:totals.action/2
 };
 
 const radarData=[
-{subject:"Clarté",score:averages.clarte},
-{subject:"Confiance",score:averages.confiance},
-{subject:"Analyse",score:averages.analyse},
-{subject:"Intuition",score:averages.intuition},
-{subject:"Action",score:averages.action}
+{subject:"Clarté",value:averages.clarte},
+{subject:"Confiance",value:averages.confiance},
+{subject:"Analyse",value:averages.analyse},
+{subject:"Intuition",value:averages.intuition},
+{subject:"Action",value:averages.action}
 ];
 
 const score=Math.round(
