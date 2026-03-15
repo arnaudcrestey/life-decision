@@ -19,6 +19,8 @@ export type ProfileType = {
   id: 1 | 2 | 3 | 4 | 5;
   title: string;
   summary: string;
+  vigilance: string[];
+  growthTracks: string[];
 };
 
 export type DiagnosticResult = {
@@ -28,7 +30,6 @@ export type DiagnosticResult = {
 };
 
 export const quizQuestions: QuizQuestion[] = [
-
 {
 id:1,
 label:"Face à une décision importante...",
@@ -128,7 +129,6 @@ answers:[
 {text:"J'ai une idée générale.",value:2},
 {text:"Ma direction est claire.",value:3}
 ]}
-
 ];
 
 export const profiles: Record<number, ProfileType> = {
@@ -136,65 +136,97 @@ export const profiles: Record<number, ProfileType> = {
 1:{
 id:1,
 title:"Décision freinée",
-summary:"Vous avez tendance à hésiter longtemps avant de trancher, ce qui peut ralentir certaines opportunités."
+summary:"Vous avez tendance à hésiter longtemps avant de trancher.",
+vigilance:[
+"Hésitation prolongée",
+"Peur de l'erreur",
+"Opportunités manquées"
+],
+growthTracks:[
+"Clarifier vos priorités",
+"Décider plus rapidement",
+"Tester de petites décisions"
+]
 },
 
 2:{
 id:2,
 title:"Décision prudente",
-summary:"Vous analysez les situations avec attention et cherchez à limiter les risques avant d'agir."
+summary:"Vous analysez les situations avec attention.",
+vigilance:[
+"Analyse excessive",
+"Temps de décision long",
+"Risque d'inaction"
+],
+growthTracks:[
+"Décider avec moins d'informations",
+"Faire confiance à votre jugement",
+"Fixer un délai de décision"
+]
 },
 
 3:{
 id:3,
 title:"Décision équilibrée",
-summary:"Vous combinez réflexion et intuition pour prendre des décisions généralement cohérentes."
+summary:"Vous combinez réflexion et intuition.",
+vigilance:[
+"Parfois trop d'équilibre",
+"Hésitations occasionnelles"
+],
+growthTracks:[
+"Renforcer votre confiance",
+"Agir plus rapidement",
+"Structurer vos choix"
+]
 },
 
 4:{
 id:4,
 title:"Décision intuitive",
-summary:"Votre intuition joue un rôle important dans vos choix et vous permet d'avancer rapidement."
+summary:"Votre intuition guide vos choix.",
+vigilance:[
+"Décisions trop rapides",
+"Analyse parfois limitée"
+],
+growthTracks:[
+"Compléter par des données",
+"Structurer votre réflexion",
+"Tester vos intuitions"
+]
 },
 
 5:{
 id:5,
 title:"Décision affirmée",
-summary:"Vous prenez vos décisions avec assurance et vous savez généralement où vous allez."
+summary:"Vous décidez avec assurance.",
+vigilance:[
+"Excès de confiance possible"
+],
+growthTracks:[
+"Écouter d'autres points de vue",
+"Tester plusieurs scénarios",
+"Conserver votre agilité"
+]
 }
 
 };
 
 export function shuffleArray<T>(array:T[]):T[]{
-
 const arr=[...array];
-
 for(let i=arr.length-1;i>0;i--){
-
 const j=Math.floor(Math.random()*(i+1));
-
 [arr[i],arr[j]]=[arr[j],arr[i]];
-
 }
-
 return arr;
-
 }
 
 export function getRandomizedQuiz(){
-
 return shuffleArray(
-
 quizQuestions.map(q=>({
-
 ...q,
-
 answers:shuffleArray(q.answers)
-
 }))
-
 );
-
 }
 
 export function computeResults(answers:QuizAnswer[]):DiagnosticResult{
@@ -208,13 +240,9 @@ action:0
 };
 
 answers.forEach(a=>{
-
 const question=quizQuestions.find(q=>q.id===a.questionId);
-
 if(!question) return;
-
 totals[question.dimension]+=a.value;
-
 });
 
 const averages={
