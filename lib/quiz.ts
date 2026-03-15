@@ -12,7 +12,7 @@ export type QuizAnswer = {
 
 export type RadarPoint = {
   subject: string;
-  score: number;
+  value: number;
 };
 
 export type ProfileType = {
@@ -28,6 +28,7 @@ export type DiagnosticResult = {
 };
 
 export const quizQuestions: QuizQuestion[] = [
+
 {
 id:1,
 label:"Face à une décision importante...",
@@ -127,6 +128,7 @@ answers:[
 {text:"J'ai une idée générale.",value:2},
 {text:"Ma direction est claire.",value:3}
 ]}
+
 ];
 
 export const profiles: Record<number, ProfileType> = {
@@ -163,7 +165,7 @@ summary:"Vous prenez vos décisions avec assurance et vous savez généralement 
 
 };
 
-export function shuffleArray<T>(array: T[]): T[] {
+export function shuffleArray<T>(array:T[]):T[]{
 
 const arr=[...array];
 
@@ -223,7 +225,7 @@ intuition:totals.intuition/1,
 action:totals.action/2
 };
 
-const radarData=[
+const radarData:RadarPoint[]=[
 {subject:"Clarté",value:averages.clarte},
 {subject:"Confiance",value:averages.confiance},
 {subject:"Analyse",value:averages.analyse},
@@ -232,7 +234,7 @@ const radarData=[
 ];
 
 const score=Math.round(
-radarData.reduce((sum,r)=>sum+r.score,0)/radarData.length*100/3
+radarData.reduce((sum,r)=>sum+r.value,0)/radarData.length*100/3
 );
 
 const globalScore=
