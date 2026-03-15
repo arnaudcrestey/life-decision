@@ -5,8 +5,29 @@ export type QuizQuestion = {
   answers: { text: string; value: number }[];
 };
 
-export const quizQuestions: QuizQuestion[] = [
+export type QuizAnswer = {
+  questionId: number;
+  value: number;
+};
 
+export type RadarPoint = {
+  subject: string;
+  score: number;
+};
+
+export type ProfileType = {
+  id: 1 | 2 | 3 | 4 | 5;
+  title: string;
+  summary: string;
+};
+
+export type DiagnosticResult = {
+  profile: ProfileType;
+  radarData: RadarPoint[];
+  score: number;
+};
+
+export const quizQuestions: QuizQuestion[] = [
 {
 id:1,
 label:"Face à une décision importante...",
@@ -106,16 +127,9 @@ answers:[
 {text:"J'ai une idée générale.",value:2},
 {text:"Ma direction est claire.",value:3}
 ]}
-
 ];
 
-export type ProfileType = {
-id:1|2|3|4|5;
-title:string;
-summary:string;
-};
-
-export const profiles:Record<number,ProfileType>={
+export const profiles: Record<number, ProfileType> = {
 
 1:{
 id:1,
@@ -149,27 +163,39 @@ summary:"Vous prenez vos décisions avec assurance et vous savez généralement 
 
 };
 
-export function shuffleArray<T>(array:T[]):T[]{
+export function shuffleArray<T>(array: T[]): T[] {
+
 const arr=[...array];
+
 for(let i=arr.length-1;i>0;i--){
+
 const j=Math.floor(Math.random()*(i+1));
+
 [arr[i],arr[j]]=[arr[j],arr[i]];
+
 }
+
 return arr;
+
 }
 
 export function getRandomizedQuiz(){
+
 return shuffleArray(
+
 quizQuestions.map(q=>({
+
 ...q,
+
 answers:shuffleArray(q.answers)
+
 }))
+
 );
+
 }
 
-export function computeResults(
-answers:{questionId:number,value:number}[]
-){
+export function computeResults(answers:QuizAnswer[]):DiagnosticResult{
 
 const totals={
 clarte:0,
@@ -180,10 +206,13 @@ action:0
 };
 
 answers.forEach(a=>{
+
 const question=quizQuestions.find(q=>q.id===a.questionId);
+
 if(!question) return;
 
 totals[question.dimension]+=a.value;
+
 });
 
 const averages={
@@ -193,6 +222,18 @@ analyse:totals.analyse/2,
 intuition:totals.intuition/1,
 action:totals.action/2
 };
+
+const radarData=[
+{subject:"Clarté",score:averages.clarte},
+{subject:"Confiance",score:averages.confiance},
+{subject:"Analyse",score:averages.analyse},
+{subject:"Intuition",score:averages.intuition},
+{subject:"Action",score:averages.action}
+];
+
+const score=Math.round(
+radarData.reduce((sum,r)=>sum+r.score,0)/radarData.length*100/3
+);
 
 const globalScore=
 (averages.clarte+
@@ -211,13 +252,8 @@ else profileId=5;
 
 return{
 profile:profiles[profileId],
-radar:[
-{subject:"Clarté",score:averages.clarte},
-{subject:"Confiance",score:averages.confiance},
-{subject:"Analyse",score:averages.analyse},
-{subject:"Intuition",score:averages.intuition},
-{subject:"Action",score:averages.action}
-]
+radarData,
+score
 };
 
 }
