@@ -11,7 +11,7 @@ export default function StartPage() {
 
         <p className="mx-auto mt-4 max-w-lg text-slate-300">
           Répondez simplement aux 10 questions suivantes.
-          Il n'y a pas de bonnes ou de mauvaises réponses.
+          Il n&apos;y a pas de bonnes ou de mauvaises réponses.
           Choisissez l'option qui vous correspond le plus spontanément.
         </p>
 
