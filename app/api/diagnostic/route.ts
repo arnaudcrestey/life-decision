@@ -15,9 +15,9 @@ export async function POST(request: Request) {
 
   const result = computeResults(body.answers);
 
-  const score = Math.round(
-    result.radar.reduce((sum, r) => sum + r.score, 0) / result.radar.length * 100 / 3
-  );
+ const score = Math.round(
+  result.radarData.reduce((sum, r) => sum + r.score, 0) / result.radarData.length * 100 / 3
+);
 
   return NextResponse.json({
     profile: result.profile,
