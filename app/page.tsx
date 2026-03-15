@@ -15,7 +15,7 @@ export default function HomePage() {
       <div className="glass-card w-full p-8 text-center md:p-12">
 
         <p className="mb-4 inline-flex rounded-full border border-cyan-300/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-cyan-300">
-          Diagnostic psychologique
+          Diagnostic psychologique gratuit
         </p>
 
         <h1 className="gradient-text text-4xl font-bold md:text-6xl">
