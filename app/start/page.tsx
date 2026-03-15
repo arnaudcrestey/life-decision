@@ -6,13 +6,13 @@ export default function StartPage() {
       <div className="glass-card w-full max-w-2xl p-10 text-center md:p-12">
 
         <h1 className="text-4xl font-bold md:text-5xl">
-          Prêt ?
+          Prêt à commencer ?
         </h1>
 
         <p className="mx-auto mt-4 max-w-lg text-slate-300">
           Répondez simplement aux 10 questions suivantes.
-          Il n&apos;y a pas de bonnes ou de mauvaises réponses.
-          Choisissez l'option qui vous correspond le plus spontanément.
+          Il n existe pas de bonnes ou de mauvaises réponses.
+          Choisissez la réponse qui vous correspond le plus spontanément.
         </p>
 
         <div className="mt-6 text-sm text-slate-400">
