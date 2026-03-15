@@ -1,243 +1,223 @@
-export type Dimension = 'clarity' | 'intuition' | 'risk' | 'alignment' | 'confidence';
-
-export type Question = {
+export type QuizQuestion = {
   id: number;
-  text: string;
-  dimension: Dimension;
-  answers: { label: string; value: 1 | 2 | 3 }[];
+  label: string;
+  dimension: "clarte" | "confiance" | "analyse" | "intuition" | "action";
+  answers: { text: string; value: number }[];
 };
 
-export type QuizSubmission = Record<number, 1 | 2 | 3>;
+export const quizQuestions: QuizQuestion[] = [
 
-export const questions: Question[] = [
-  {
-    id: 1,
-    text: 'Quand une décision importante arrive, je clarifie mes objectifs avant d\'agir.',
-    dimension: 'clarity',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 2,
-    text: 'J\'écoute mon intuition même quand je n\'ai pas toutes les données.',
-    dimension: 'intuition',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 3,
-    text: 'Je suis prêt(e) à prendre des risques pour évoluer dans ma vie.',
-    dimension: 'risk',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 4,
-    text: 'Mes décisions respectent mes valeurs profondes.',
-    dimension: 'alignment',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 5,
-    text: 'Je me sens confiant(e) après avoir fait un choix important.',
-    dimension: 'confidence',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 6,
-    text: 'Je distingue facilement ce qui est urgent de ce qui est essentiel.',
-    dimension: 'clarity',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 7,
-    text: 'Je fais confiance à mes ressentis pour orienter mes choix de vie.',
-    dimension: 'intuition',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 8,
-    text: 'Je peux sortir de ma zone de confort quand une opportunité se présente.',
-    dimension: 'risk',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 9,
-    text: 'Je vérifie que mes décisions servent ma vision à long terme.',
-    dimension: 'alignment',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  },
-  {
-    id: 10,
-    text: 'Je peux décider sans rester bloqué(e) par la peur de me tromper.',
-    dimension: 'confidence',
-    answers: [
-      { label: 'Rarement', value: 1 },
-      { label: 'Parfois', value: 2 },
-      { label: 'Souvent', value: 3 }
-    ]
-  }
+{
+id:1,
+label:"Face à une décision importante...",
+dimension:"confiance",
+answers:[
+{text:"Je doute longtemps avant de décider.",value:1},
+{text:"Je réfléchis puis je tranche.",value:2},
+{text:"Je décide rapidement.",value:3}
+]},
+
+{
+id:2,
+label:"Lorsque plusieurs options s'offrent à vous...",
+dimension:"analyse",
+answers:[
+{text:"Je compare longuement toutes les possibilités.",value:3},
+{text:"Je me fie à mon intuition.",value:2},
+{text:"Je demande conseil autour de moi.",value:1}
+]},
+
+{
+id:3,
+label:"Quand une opportunité se présente...",
+dimension:"action",
+answers:[
+{text:"Je préfère attendre avant de m'engager.",value:1},
+{text:"J'évalue rapidement les risques.",value:2},
+{text:"Je saisis l'opportunité.",value:3}
+]},
+
+{
+id:4,
+label:"Dans les périodes d'incertitude...",
+dimension:"clarte",
+answers:[
+{text:"Je me sens parfois perdu.",value:1},
+{text:"Je prends du recul pour analyser.",value:2},
+{text:"Je garde une direction claire.",value:3}
+]},
+
+{
+id:5,
+label:"Avant de prendre une décision...",
+dimension:"analyse",
+answers:[
+{text:"Je collecte beaucoup d'informations.",value:3},
+{text:"Je réfléchis brièvement.",value:2},
+{text:"Je décide selon mon ressenti.",value:1}
+]},
+
+{
+id:6,
+label:"Lorsque vous devez choisir rapidement...",
+dimension:"confiance",
+answers:[
+{text:"Je ressens du stress.",value:1},
+{text:"Je garde un certain contrôle.",value:2},
+{text:"Je décide avec assurance.",value:3}
+]},
+
+{
+id:7,
+label:"Votre intuition dans les décisions...",
+dimension:"intuition",
+answers:[
+{text:"Elle me guide souvent.",value:3},
+{text:"Elle intervient parfois.",value:2},
+{text:"Je m'en méfie.",value:1}
+]},
+
+{
+id:8,
+label:"Face à une décision difficile...",
+dimension:"clarte",
+answers:[
+{text:"Je repousse la décision.",value:1},
+{text:"Je prends le temps de clarifier.",value:2},
+{text:"Je tranche une fois les éléments réunis.",value:3}
+]},
+
+{
+id:9,
+label:"Votre manière de décider est plutôt...",
+dimension:"action",
+answers:[
+{text:"Prudente.",value:1},
+{text:"Équilibrée.",value:2},
+{text:"Décisive.",value:3}
+]},
+
+{
+id:10,
+label:"Quand vous regardez votre trajectoire de vie...",
+dimension:"clarte",
+answers:[
+{text:"Je cherche encore ma direction.",value:1},
+{text:"J'ai une idée générale.",value:2},
+{text:"Ma direction est claire.",value:3}
+]}
+
 ];
 
-export type Profile = {
-  key: string;
-  title: string;
-  summary: string;
-  vigilance: string[];
-  recommendations: string[];
+export type ProfileType = {
+id:1|2|3|4|5;
+title:string;
+summary:string;
 };
 
-export const profiles: Profile[] = [
-  {
-    key: 'paralysie',
-    title: 'Paralysie décisionnelle',
-    summary: 'Vous ressentez une forte charge mentale face aux choix importants, ce qui ralentit vos actions.',
-    vigilance: ['Surcharge d\'options', 'Peur de l\'erreur', 'Report des décisions clés'],
-    recommendations: [
-      'Limiter vos options à 2 ou 3 alternatives concrètes.',
-      'Fixer une date limite de décision.',
-      'Valider chaque choix avec un critère principal simple.'
-    ]
-  },
-  {
-    key: 'prudent',
-    title: 'Décideur prudent',
-    summary: 'Vous privilégiez la stabilité, la sécurité et l\'anticipation des risques.',
-    vigilance: ['Évitement du changement', 'Opportunités manquées', 'Excès de contrôle'],
-    recommendations: [
-      'Tester le changement par petits pas.',
-      'Identifier un risque acceptable par décision.',
-      'Évaluer les bénéfices potentiels autant que les risques.'
-    ]
-  },
-  {
-    key: 'explorateur',
-    title: 'Explorateur',
-    summary: 'Vous aimez expérimenter et avancer par l\'action.',
-    vigilance: ['Dispersion', 'Décisions impulsives', 'Manque de suivi'],
-    recommendations: [
-      'Ajouter un cadre de priorités hebdomadaire.',
-      'Mesurer les impacts avant la prochaine étape.',
-      'Conserver un cap aligné avec vos objectifs long terme.'
-    ]
-  },
-  {
-    key: 'intuitif',
-    title: 'Décideur intuitif',
-    summary: 'Votre instinct est un guide puissant dans vos choix personnels et professionnels.',
-    vigilance: ['Biais émotionnels', 'Manque de vérification factuelle', 'Difficulté à expliquer ses choix'],
-    recommendations: [
-      'Compléter l\'intuition avec 1 à 2 données clés.',
-      'Prendre du recul avant toute décision critique.',
-      'Documenter vos motifs de décision pour progresser.'
-    ]
-  },
-  {
-    key: 'aligne',
-    title: 'Décideur aligné',
-    summary: 'Vous prenez des décisions cohérentes avec vos valeurs et votre vision de long terme.',
-    vigilance: ['Rigidité potentielle', 'Perfectionnisme', 'Exigence élevée envers soi-même'],
-    recommendations: [
-      'Conserver de la flexibilité selon le contexte.',
-      'Célébrer les décisions imparfaites mais justes.',
-      'Continuer à ajuster vos choix avec feedback régulier.'
-    ]
-  }
-];
+export const profiles:Record<number,ProfileType>={
 
-export type DiagnosticResult = {
-  averages: Record<Dimension, number>;
-  radarData: { subject: string; value: number }[];
-  score: number;
-  profile: Profile;
+1:{
+id:1,
+title:"Décision freinée",
+summary:"Vous avez tendance à hésiter longtemps avant de trancher, ce qui peut ralentir certaines opportunités."
+},
+
+2:{
+id:2,
+title:"Décision prudente",
+summary:"Vous analysez les situations avec attention et cherchez à limiter les risques avant d'agir."
+},
+
+3:{
+id:3,
+title:"Décision équilibrée",
+summary:"Vous combinez réflexion et intuition pour prendre des décisions généralement cohérentes."
+},
+
+4:{
+id:4,
+title:"Décision intuitive",
+summary:"Votre intuition joue un rôle important dans vos choix et vous permet d'avancer rapidement."
+},
+
+5:{
+id:5,
+title:"Décision affirmée",
+summary:"Vous prenez vos décisions avec assurance et vous savez généralement où vous allez."
+}
+
 };
 
-export function evaluateQuiz(submission: QuizSubmission): DiagnosticResult {
-  const sums: Record<Dimension, number> = {
-    clarity: 0,
-    intuition: 0,
-    risk: 0,
-    alignment: 0,
-    confidence: 0
-  };
+export function shuffleArray<T>(array:T[]):T[]{
+const arr=[...array];
+for(let i=arr.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[arr[i],arr[j]]=[arr[j],arr[i]];
+}
+return arr;
+}
 
-  const counts: Record<Dimension, number> = {
-    clarity: 0,
-    intuition: 0,
-    risk: 0,
-    alignment: 0,
-    confidence: 0
-  };
+export function getRandomizedQuiz(){
+return shuffleArray(
+quizQuestions.map(q=>({
+...q,
+answers:shuffleArray(q.answers)
+}))
+);
+}
 
-  for (const question of questions) {
-    const value = submission[question.id] ?? 0;
-    sums[question.dimension] += value;
-    counts[question.dimension] += 1;
-  }
+export function computeResults(
+answers:{questionId:number,value:number}[]
+){
 
-  const averages = {
-    clarity: Number((sums.clarity / counts.clarity).toFixed(2)),
-    intuition: Number((sums.intuition / counts.intuition).toFixed(2)),
-    risk: Number((sums.risk / counts.risk).toFixed(2)),
-    alignment: Number((sums.alignment / counts.alignment).toFixed(2)),
-    confidence: Number((sums.confidence / counts.confidence).toFixed(2))
-  };
+const totals={
+clarte:0,
+confiance:0,
+analyse:0,
+intuition:0,
+action:0
+};
 
-  const rawScore = Object.values(averages).reduce((acc, val) => acc + val, 0);
-  const score = Math.round((rawScore / 15) * 100);
+answers.forEach(a=>{
+const question=quizQuestions.find(q=>q.id===a.questionId);
+if(!question) return;
 
-  const radarData = [
-    { subject: 'Clarté', value: averages.clarity },
-    { subject: 'Intuition', value: averages.intuition },
-    { subject: 'Risque', value: averages.risk },
-    { subject: 'Alignement', value: averages.alignment },
-    { subject: 'Confiance', value: averages.confidence }
-  ];
+totals[question.dimension]+=a.value;
+});
 
-  let profile = profiles[1];
-  if (score < 35) profile = profiles[0];
-  else if (score < 55) profile = profiles[1];
-  else if (averages.intuition >= 2.6 && averages.clarity < 2.4) profile = profiles[3];
-  else if (averages.risk >= 2.5 && averages.alignment < 2.6) profile = profiles[2];
-  else if (score >= 75 && averages.alignment >= 2.6) profile = profiles[4];
+const averages={
+clarte:totals.clarte/3,
+confiance:totals.confiance/2,
+analyse:totals.analyse/2,
+intuition:totals.intuition/1,
+action:totals.action/2
+};
 
-  return {
-    averages,
-    radarData,
-    score,
-    profile
-  };
+const globalScore=
+(averages.clarte+
+averages.confiance+
+averages.analyse+
+averages.intuition+
+averages.action)/5;
+
+let profileId:1|2|3|4|5=3;
+
+if(globalScore<=1.5) profileId=1;
+else if(globalScore<=2) profileId=2;
+else if(globalScore<=2.4) profileId=3;
+else if(globalScore<=2.7) profileId=4;
+else profileId=5;
+
+return{
+profile:profiles[profileId],
+radar:[
+{subject:"Clarté",score:averages.clarte},
+{subject:"Confiance",score:averages.confiance},
+{subject:"Analyse",score:averages.analyse},
+{subject:"Intuition",score:averages.intuition},
+{subject:"Action",score:averages.action}
+]
+};
+
 }
