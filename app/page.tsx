@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
 const highlights = [
-  'Doutes personnels',
   'Choix de carrière',
-  'Transitions de vie',
   'Décisions importantes',
-  'Changements personnels'
+  'Transitions de vie',
+  'Blocages décisionnels',
+  'Direction de vie'
 ];
 
 export default function HomePage() {
@@ -13,23 +13,31 @@ export default function HomePage() {
     <section className="flex flex-1 items-center justify-center">
       <div className="glass-card w-full p-8 text-center md:p-12">
         <p className="mb-4 inline-flex rounded-full border border-cyan-300/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-cyan-300">
-          Diagnostic viral
+          Diagnostic psychologique
         </p>
-        <h1 className="gradient-text text-4xl font-bold md:text-6xl">Life Decision</h1>
+
+        <h1 className="gradient-text text-4xl font-bold md:text-6xl">
+          Life Decision Scan
+        </h1>
+
         <p className="mx-auto mt-4 max-w-2xl text-slate-300">
-          En 2 minutes, découvrez ce qui influence réellement vos décisions importantes.
+          En 2 minutes, découvrez votre manière profonde de prendre des décisions
+          et les dynamiques invisibles qui influencent vos choix de vie.
         </p>
 
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2 md:grid-cols-3">
           {highlights.map((item) => (
-            <span key={item} className="rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2 text-sm text-slate-200">
+            <span
+              key={item}
+              className="rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2 text-sm text-slate-200"
+            >
               {item}
             </span>
           ))}
         </div>
 
         <Link href="/start" className="primary-btn mt-10">
-          Faire le diagnostic
+          Découvrir mon profil décisionnel
         </Link>
       </div>
     </section>
