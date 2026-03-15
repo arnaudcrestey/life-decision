@@ -5,7 +5,8 @@ const highlights = [
   'Décisions importantes',
   'Transitions de vie',
   'Blocages décisionnels',
-  'Direction de vie'
+  'Direction de vie',
+  'Clarté intérieure'
 ];
 
 export default function HomePage() {
@@ -17,12 +18,12 @@ export default function HomePage() {
         </p>
 
         <h1 className="gradient-text text-4xl font-bold md:text-6xl">
-          Life Decision Scan
+          Life Décision
         </h1>
 
         <p className="mx-auto mt-4 max-w-2xl text-slate-300">
           En 2 minutes, découvrez votre manière profonde de prendre des décisions
-          et les dynamiques invisibles qui influencent vos choix de vie.
+          et les dynamiques qui influencent vos choix de vie.
         </p>
 
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2 md:grid-cols-3">
