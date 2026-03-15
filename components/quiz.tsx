@@ -38,7 +38,7 @@ export default function Quiz() {
       setCurrent(current + 1);
     } else {
       localStorage.setItem("quizAnswers", JSON.stringify(updated));
-      router.push("/result");
+      router.push("/resultat");
     }
   }
 
