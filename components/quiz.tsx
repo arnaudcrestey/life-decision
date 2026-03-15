@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getRandomizedQuiz } from "@/lib/quiz";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Answer = {
   questionId: number;
@@ -17,8 +18,7 @@ export default function Quiz() {
   const [answers, setAnswers] = useState<Answer[]>([]);
 
   useEffect(() => {
-    const q = getRandomizedQuiz();
-    setQuestions(q);
+    setQuestions(getRandomizedQuiz());
   }, []);
 
   if (!questions.length) return null;
@@ -27,18 +27,14 @@ export default function Quiz() {
   const progress = ((current + 1) / questions.length) * 100;
 
   function handleAnswer(value: number) {
-    const updated = [
-      ...answers,
-      { questionId: question.id, value }
-    ];
-
+    const updated = [...answers, { questionId: question.id, value }];
     setAnswers(updated);
 
     if (current + 1 < questions.length) {
       setCurrent(current + 1);
     } else {
       localStorage.setItem("quizAnswers", JSON.stringify(updated));
-      router.push("/resultat");
+      router.push("/analyse");
     }
   }
 
@@ -46,9 +42,9 @@ export default function Quiz() {
     <div className="flex flex-1 items-center justify-center px-4">
       <div className="glass-card w-full max-w-2xl p-8 text-center md:p-12">
 
-        {/* progress */}
-        <div className="mb-6 text-sm text-slate-400">
-          Question {current + 1} / {questions.length}
+        <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <span>Question {current + 1}</span>
+          <span>{Math.round(progress)}%</span>
         </div>
 
         <div className="h-2 w-full rounded bg-slate-800 mb-8 overflow-hidden">
@@ -58,23 +54,51 @@ export default function Quiz() {
           />
         </div>
 
-        {/* question */}
-        <h2 className="text-2xl font-semibold mb-8">
-          {question.label}
-        </h2>
+        <AnimatePresence mode="wait">
 
-        {/* answers */}
-        <div className="space-y-4">
-          {question.answers.map((a: any, i: number) => (
-            <button
-              key={i}
-              onClick={() => handleAnswer(a.value)}
-              className="w-full rounded-xl border border-white/10 bg-slate-900/40 px-6 py-4 text-left text-slate-200 hover:border-cyan-400 hover:bg-slate-900 transition"
-            >
-              {a.text}
-            </button>
-          ))}
-        </div>
+          <motion.div
+            key={question.id}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.25 }}
+          >
+
+            <div className="text-3xl mb-4">🧭</div>
+
+            <h2 className="text-2xl font-semibold mb-8">
+              {question.label}
+            </h2>
+
+            <div className="space-y-4">
+
+              {question.answers.map((a: any, i: number) => (
+
+                <button
+                  key={i}
+                  onClick={() => handleAnswer(a.value)}
+                  className="
+                    w-full rounded-xl border border-white/10
+                    bg-slate-900/40 px-6 py-4 text-left
+                    text-slate-200 transition
+                    hover:border-cyan-400 hover:bg-slate-900
+                    active:scale-[0.98]
+                  "
+                >
+                  {a.text}
+                </button>
+
+              ))}
+
+            </div>
+
+            <p className="mt-6 text-xs text-slate-400">
+              Répondez spontanément. Il n’y a pas de bonne ou mauvaise réponse.
+            </p>
+
+          </motion.div>
+
+        </AnimatePresence>
 
       </div>
     </div>
