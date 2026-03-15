@@ -1,6 +1,6 @@
-import type { Profile } from '@/lib/quiz';
+import type { ProfileType } from "@/lib/quiz";
 
-export function ResultCard({ profile, score }: { profile: Profile; score: number }) {
+export function ResultCard({ profile, score }: { profile: ProfileType; score: number }) {
   return (
     <section className="glass-card p-6">
       <p className="mb-1 text-sm uppercase tracking-wide text-cyan-300">Votre profil</p>
