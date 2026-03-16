@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { nodemailer } from "nodemailer";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from "nodemailer";
 
 type LeadPayload = {
   firstName: string;
@@ -29,15 +27,32 @@ export async function POST(request: Request) {
     !body.birthMinute ||
     !body.birthPlace
   ) {
-    return NextResponse.json({ error: "Champs incomplets" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Champs incomplets" },
+      { status: 400 }
+    );
   }
 
   try {
 
-    await resend.emails.send({
-      from: "Astrae <contact@arnaudcrestey.com>",
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+
+      from: `"Life Decision" <${process.env.EMAIL_USER}>`,
+
       to: body.email,
+
       subject: "Votre analyse Life Decision",
+
       html: `
         <h2>Bonjour ${body.firstName}</h2>
 
@@ -63,7 +78,7 @@ export async function POST(request: Request) {
 
   } catch (error) {
 
-    console.error(error);
+    console.error("Erreur email:", error);
 
     return NextResponse.json(
       { error: "Erreur envoi email" },
@@ -71,5 +86,4 @@ export async function POST(request: Request) {
     );
 
   }
-
 }
