@@ -288,6 +288,7 @@ type="text"
 inputMode="numeric"
 maxLength={2}
 placeholder="JJ"
+aria-label="Jour"
 value={birthDay}
 onChange={(e)=>setBirthDay(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
@@ -298,6 +299,7 @@ type="text"
 inputMode="numeric"
 maxLength={2}
 placeholder="MM"
+aria-label="Mois"
 value={birthMonth}
 onChange={(e)=>setBirthMonth(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
@@ -307,14 +309,14 @@ className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 type="text"
 inputMode="numeric"
 maxLength={4}
-placeholder="AA"
+placeholder="AAAA"
+aria-label="Année"
 value={birthYear}
 onChange={(e)=>setBirthYear(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 </div>
-
 <p className="text-sm text-white/70 text-left mt-4">
 Heure de naissance
 </p>
