@@ -159,16 +159,6 @@ if (submitted) {
           ⏱️ Vous recevrez votre analyse dans votre boîte email très prochainement.
         </p>
 
-        <div className="mt-8 border-t border-white/10 pt-6">
-
-          <p className="text-white/70 mb-4">
-            En attendant, partagez ce diagnostic avec quelqu’un qui pourrait en avoir besoin.
-          </p>
-
-          <ShareButtons />
-
-        </div>
-
       </div>
 
     </main>
