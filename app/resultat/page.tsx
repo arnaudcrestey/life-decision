@@ -307,7 +307,7 @@ className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 type="text"
 inputMode="numeric"
 maxLength={4}
-placeholder="AAAA"
+placeholder="AA"
 value={birthYear}
 onChange={(e)=>setBirthYear(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
