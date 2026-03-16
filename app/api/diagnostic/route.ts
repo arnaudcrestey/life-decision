@@ -47,13 +47,33 @@ export async function PUT(request: Request) {
       );
     }
 
-    const fallback = `Votre score décisionnel est de ${result.score}%.\n\nVotre profil dominant est : ${result.profile.title}. Vous disposez déjà de certaines ressources pour prendre des décisions efficaces. Prenez le temps de clarifier vos priorités et concentrez-vous sur une décision concrète à fort impact dans les prochains jours.`;
+    const fallback = `Votre score décisionnel est de ${result.score}%.\n\nVotre profil dominant est : ${result.profile.title}. Ce résultat suggère certaines tendances dans votre manière de prendre des décisions. Vous disposez déjà de ressources pour avancer, mais certaines dynamiques personnelles peuvent influencer vos choix.`;
 
     const apiKey = process.env.OPENAI_API_KEY;
 
     if (!apiKey) {
       return NextResponse.json({ analysis: fallback });
     }
+
+    const prompt = `
+Vous êtes un expert en prise de décision et en psychologie comportementale.
+
+Le score décisionnel exact est : ${result.score}%.
+Profil détecté : ${result.profile.title}
+
+Radar :
+${JSON.stringify(result.radarData)}
+
+Rédigez une analyse courte (60 à 80 mots maximum).
+
+Règles :
+- Utiliser "vous"
+- Mentionner exactement le score ${result.score}%
+- Ton clair et crédible
+- Expliquer ce que signifie ce score dans la manière de prendre des décisions
+
+Terminez par une phrase expliquant que certaines dynamiques décisionnelles peuvent être liées à la personnalité, l’histoire de vie ou les cycles personnels, et mentionnez que le Cabinet Astrae propose une analyse plus approfondie grâce à l’étude du thème astral.
+`;
 
     const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
@@ -69,15 +89,11 @@ export async function PUT(request: Request) {
             {
               role: "system",
               content:
-                "Tu es un coach spécialisé dans la prise de décision. Réponds en français dans un style clair, professionnel et bienveillant. 120 à 180 mots maximum."
+                "Tu es un spécialiste de la prise de décision et du comportement humain. Réponds en français, style clair et naturel."
             },
             {
               role: "user",
-              content: `Profil : ${result.profile.title}.
-Score : ${result.score}%.
-Radar : ${JSON.stringify(result.radarData)}.
-
-Rédige une analyse personnalisée et donne 3 conseils concrets pour améliorer la prise de décision.`
+              content: prompt
             }
           ],
           temperature: 0.7
