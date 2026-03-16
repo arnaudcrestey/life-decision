@@ -14,76 +14,68 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
-
-  const body = (await request.json()) as Partial<LeadPayload>;
-
-  if (
-    !body.firstName ||
-    !body.email ||
-    !body.birthDay ||
-    !body.birthMonth ||
-    !body.birthYear ||
-    !body.birthHour ||
-    !body.birthMinute ||
-    !body.birthPlace
-  ) {
-    return NextResponse.json(
-      { error: "Champs incomplets" },
-      { status: 400 }
-    );
-  }
-
   try {
+    const body = (await request.json()) as Partial<LeadPayload>;
+
+    if (
+      !body.firstName ||
+      !body.email ||
+      !body.birthDay ||
+      !body.birthMonth ||
+      !body.birthYear ||
+      !body.birthHour ||
+      !body.birthMinute ||
+      !body.birthPlace
+    ) {
+      return NextResponse.json(
+        { error: "Champs incomplets" },
+        { status: 400 }
+      );
+    }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       }
     });
 
+    const htmlContent = `
+      <h2>Bonjour ${body.firstName}</h2>
+
+      <p>Merci d'avoir réalisé le diagnostic <strong>Life Decision</strong>.</p>
+
+      <p><strong>Score décisionnel :</strong> ${body.score}%</p>
+
+      <h3>Informations transmises</h3>
+
+      <ul>
+        <li>Date de naissance : ${body.birthDay}/${body.birthMonth}/${body.birthYear}</li>
+        <li>Heure : ${body.birthHour}:${body.birthMinute}</li>
+        <li>Lieu : ${body.birthPlace}</li>
+      </ul>
+
+      <p>Votre analyse personnalisée vous sera envoyée prochainement.</p>
+
+      <p><strong>Cabinet Astrae</strong></p>
+    `;
+
     await transporter.sendMail({
-
       from: `"Life Decision" <${process.env.EMAIL_USER}>`,
-
       to: body.email,
-
       subject: "Votre analyse Life Decision",
-
-      html: `
-        <h2>Bonjour ${body.firstName}</h2>
-
-        <p>Merci d'avoir réalisé le diagnostic <strong>Life Decision</strong>.</p>
-
-        <p><strong>Score décisionnel :</strong> ${body.score}%</p>
-
-        <h3>Informations transmises</h3>
-
-        <ul>
-          <li>Date de naissance : ${body.birthDay}/${body.birthMonth}/${body.birthYear}</li>
-          <li>Heure : ${body.birthHour}:${body.birthMinute}</li>
-          <li>Lieu : ${body.birthPlace}</li>
-        </ul>
-
-        <p>Votre analyse personnalisée vous sera envoyée prochainement.</p>
-
-        <p>Cabinet Astrae</p>
-      `
+      html: htmlContent
     });
 
     return NextResponse.json({ success: true });
 
   } catch (error) {
-
-    console.error("Erreur email:", error);
+    console.error("Erreur email :", error);
 
     return NextResponse.json(
-      { error: "Erreur envoi email" },
+      { error: "Erreur lors de l'envoi de l'email" },
       { status: 500 }
     );
-
   }
 }
