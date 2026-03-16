@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-// @ts-ignore
+// @ts-ignore - nodemailer types sometimes break on Vercel serverless
 import nodemailer from "nodemailer";
 
 type LeadPayload = {
@@ -15,13 +15,10 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
-
   try {
-
     const body = (await request.json()) as Partial<LeadPayload>;
 
-    console.log("Lead reçu :", body);
-
+    // validation
     if (
       !body.firstName ||
       !body.email ||
@@ -38,6 +35,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // sécurité env
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("EMAIL_USER ou EMAIL_PASS manquant");
+      return NextResponse.json(
+        { error: "Configuration email incorrecte" },
+        { status: 500 }
+      );
+    }
+
+    // transport SMTP
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -51,7 +58,7 @@ export async function POST(request: Request) {
 
       <p>Merci d'avoir réalisé le diagnostic <strong>Life Decision</strong>.</p>
 
-      <p><strong>Score décisionnel :</strong> ${body.score}%</p>
+      <p><strong>Score décisionnel :</strong> ${body.score ?? "—"}%</p>
 
       <h3>Informations transmises</h3>
 
@@ -66,31 +73,24 @@ export async function POST(request: Request) {
       <p><strong>Cabinet Astrae</strong></p>
     `;
 
-    const info = await transporter.sendMail({
-
+    const mailOptions = {
       from: `"Life Decision" <${process.env.EMAIL_USER}>`,
-
-      // envoi au client + copie à toi
-      to: [body.email, process.env.EMAIL_USER],
-
+      to: [body.email!, process.env.EMAIL_USER!], // client + copie pour toi
       subject: "Votre analyse Life Decision",
-
       html: htmlContent
-    });
+    };
 
-    console.log("Email envoyé :", info);
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log("Email envoyé:", info.messageId);
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
-
-    console.error("Erreur email :", error);
+    console.error("Erreur email:", error);
 
     return NextResponse.json(
       { error: "Erreur lors de l'envoi de l'email" },
       { status: 500 }
     );
-
   }
-
 }
