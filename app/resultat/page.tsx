@@ -131,30 +131,51 @@ setSending(false);
 
 }
 
-if(submitted){
+if (submitted) {
 
-return(
+  return (
 
-<main className="flex min-h-screen items-center justify-center px-6 text-center">
+    <main className="flex min-h-screen items-center justify-center px-6 text-center">
 
-<div className="glass max-w-xl rounded-2xl p-10">
+      <div className="glass-card max-w-xl p-10">
 
-<h2 className="text-3xl font-semibold mb-4">
-✓ Demande envoyée
-</h2>
+        <div className="text-4xl mb-4">
+          ✉️
+        </div>
 
-<p className="text-white/80">
-Votre première lecture personnalisée vous sera envoyée prochainement.
-</p>
+        <h2 className="text-3xl font-semibold mb-3">
+          Demande bien envoyée
+        </h2>
 
-</div>
+        <p className="text-white/80 leading-relaxed">
+          Votre demande a été enregistrée avec succès.
+        </p>
 
-</main>
+        <p className="mt-3 text-white/70">
+          Nous préparons actuellement votre première lecture personnalisée.
+        </p>
 
-);
+        <p className="mt-6 text-sm text-white/60">
+          ⏱️ Vous recevrez votre analyse dans votre boîte email très prochainement.
+        </p>
+
+        <div className="mt-8 border-t border-white/10 pt-6">
+
+          <p className="text-white/70 mb-4">
+            En attendant, partagez ce diagnostic avec quelqu’un qui pourrait en avoir besoin.
+          </p>
+
+          <ShareButtons />
+
+        </div>
+
+      </div>
+
+    </main>
+
+  );
 
 }
-
 return(
 
 <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-10">
