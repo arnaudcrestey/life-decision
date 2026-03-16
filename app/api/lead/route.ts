@@ -15,8 +15,12 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
+
   try {
+
     const body = (await request.json()) as Partial<LeadPayload>;
+
+    console.log("Lead reçu :", body);
 
     if (
       !body.firstName ||
@@ -62,21 +66,31 @@ export async function POST(request: Request) {
       <p><strong>Cabinet Astrae</strong></p>
     `;
 
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
+
       from: `"Life Decision" <${process.env.EMAIL_USER}>`,
-      to: body.email,
+
+      // envoi au client + copie à toi
+      to: [body.email, process.env.EMAIL_USER],
+
       subject: "Votre analyse Life Decision",
+
       html: htmlContent
     });
+
+    console.log("Email envoyé :", info);
 
     return NextResponse.json({ success: true });
 
   } catch (error) {
+
     console.error("Erreur email :", error);
 
     return NextResponse.json(
       { error: "Erreur lors de l'envoi de l'email" },
       { status: 500 }
     );
+
   }
+
 }
