@@ -16,7 +16,7 @@ export default function StartPage() {
         </p>
 
         <div className="mt-6 text-sm text-slate-400">
-          10 questions • 2 minutes
+          ✔️ 10 questions   ✔️ 2 minutes
         </div>
 
         <Link href="/diagnostic" className="primary-btn mt-10">
