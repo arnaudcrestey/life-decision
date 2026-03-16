@@ -86,7 +86,10 @@ try{
 const res = await fetch("/api/diagnostic",{
 method:"PUT",
 headers:{ "Content-Type":"application/json" },
-body:JSON.stringify(result)
+body: JSON.stringify({
+  ...result,
+  score: alignmentScore
+})
 });
 
 const data = await res.json();
