@@ -219,21 +219,6 @@ data={result.radarData}
 
 )}
 
-<section className="glass-card mt-8 p-6 text-center">
-
-<p className="text-lg text-white/80">
-Score décisionnel global
-</p>
-
-<p className="mt-2 text-4xl font-bold text-cyan-400">
-{alignmentScore}%
-</p>
-
-<p className="mt-2 text-white/60 text-sm">
-Score moyen des participants : 54 %
-</p>
-
-</section>
 
 <section className="glass-card mt-8 p-6">
 
