@@ -137,7 +137,7 @@ return(
 
 <main className="flex min-h-screen items-center justify-center px-6 text-center">
 
-<div className="glass-card max-w-xl p-10">
+<div className="glass max-w-xl rounded-2xl p-10">
 
 <h2 className="text-3xl font-semibold mb-4">
 ✓ Demande envoyée
