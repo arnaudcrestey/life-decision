@@ -28,7 +28,7 @@ export function ResultCard({ profile, score }: Props) {
           Indice décisionnel
         </p>
 
-        <p className="text-3xl font-bold text-cyan-300">
+        <p className="text-4xl font-bold text-cyan-300">
           {score}%
         </p>
 
