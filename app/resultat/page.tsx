@@ -1,200 +1,349 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { RadarChart } from '@/components/radar-chart';
-import { ResultCard } from '@/components/result-card';
-import { ShareButtons } from '@/components/share-buttons';
-import type { DiagnosticResult } from '@/lib/quiz';
-
-type LeadForm = {
-  firstName: string;
-  email: string;
-  birthDate: string;
-  birthTime: string;
-  birthPlace: string;
-};
-
-const initialForm: LeadForm = {
-  firstName: '',
-  email: '',
-  birthDate: '',
-  birthTime: '',
-  birthPlace: ''
-};
+import { useEffect, useMemo, useState } from "react";
+import { RadarChart } from "@/components/radar-chart";
+import { ResultCard } from "@/components/result-card";
+import { ShareButtons } from "@/components/share-buttons";
+import { computeResults } from "@/lib/quiz";
 
 export default function ResultPage() {
 
-  const [result, setResult] = useState<DiagnosticResult | null>(null);
-  const [analysis, setAnalysis] = useState<string>('Analyse en cours...');
-  const [form, setForm] = useState<LeadForm>(initialForm);
-  const [message, setMessage] = useState<string>('');
+const [answers,setAnswers] = useState<any[]>([]);
+const [analysis,setAnalysis] = useState<string | null>(null);
 
-  useEffect(() => {
+const [firstName,setFirstName] = useState("");
+const [email,setEmail] = useState("");
 
-    const stored = localStorage.getItem('quizAnswers');
+const [birthDay,setBirthDay] = useState("");
+const [birthMonth,setBirthMonth] = useState("");
+const [birthYear,setBirthYear] = useState("");
+const [birthHour,setBirthHour] = useState("");
+const [birthMinute,setBirthMinute] = useState("");
+const [birthPlace,setBirthPlace] = useState("");
 
-    if (!stored) return;
+const [analysisRequested,setAnalysisRequested] = useState(false);
+const [sending,setSending] = useState(false);
+const [submitted,setSubmitted] = useState(false);
 
-    const answers = JSON.parse(stored);
+useEffect(()=>{
 
-    fetch('/api/diagnostic', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answers })
-    })
-      .then((res) => res.json())
-      .then((data: DiagnosticResult) => {
+const rawAnswers = localStorage.getItem("quizAnswers");
 
-        setResult(data);
+if(rawAnswers){
+setAnswers(JSON.parse(rawAnswers));
+}
 
-        localStorage.setItem('lifeDecisionResult', JSON.stringify(data));
+},[]);
 
-        return fetch('/api/diagnostic', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+const result = useMemo(()=>{
 
-      })
-      .then((res) => res?.json())
-      .then((data) => {
-        if (data?.analysis) {
-          setAnalysis(data.analysis);
-        }
-      })
-      .catch(() => {
-        setAnalysis('Analyse indisponible pour le moment.');
-      });
+if(!answers.length) return null;
 
-  }, []);
+return computeResults(answers);
 
-  const onChange = (field: keyof LeadForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+},[answers]);
 
-  const onSubmitLead = async (event: React.FormEvent<HTMLFormElement>) => {
+const alignmentScore = useMemo(()=>{
 
-    event.preventDefault();
+if(!result?.radarData) return 0;
 
-    const response = await fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
+const values = result.radarData.map((item:any)=>item.value);
 
-    if (response.ok) {
-      setMessage('Merci. Votre analyse approfondie vous sera envoyée.');
-      setForm(initialForm);
-      return;
-    }
+const avg = values.reduce((a,b)=>a+b,0) / values.length;
 
-    setMessage('Une erreur est survenue. Merci de réessayer.');
+const normalized = ((avg - 1) / 2) * 100;
 
-  };
+return Math.round(normalized);
 
-  if (!result) {
-    return (
-      <p className="text-center text-slate-300">
-        Chargement du résultat...
-      </p>
-    );
-  }
+},[result]);
 
-  return (
-    <section className="space-y-6">
+useEffect(()=>{
 
-      <ResultCard
-        profile={result.profile}
-        score={result.score}
-      />
+if(!result || !alignmentScore || analysisRequested) return;
 
-      <RadarChart
-        data={result.radarData}
-      />
+setAnalysisRequested(true);
 
-      <article className="glass-card p-6">
+async function generateAnalysis(){
 
-        <h2 className="text-xl font-semibold">
-          Analyse personnalisée
-        </h2>
+try{
 
-        <p className="mt-3 whitespace-pre-line text-slate-300">
-          {analysis}
-        </p>
+const res = await fetch("/api/diagnostic",{
+method:"PUT",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify(result)
+});
 
-      </article>
+const data = await res.json();
 
-      <section className="glass-card p-6">
+if(data?.analysis){
+setAnalysis(data.analysis);
+}
 
-        <h2 className="text-xl font-semibold">
-          Recevoir mon analyse approfondie
-        </h2>
+}catch(error){
 
-        <form
-          className="mt-4 grid gap-3 md:grid-cols-2"
-          onSubmit={onSubmitLead}
-        >
+setAnalysis("Analyse indisponible pour le moment.");
 
-          <input
-            value={form.firstName}
-            onChange={(e) => onChange('firstName', e.target.value)}
-            placeholder="Prénom"
-            required
-            className="rounded-lg border border-white/15 bg-slate-900/50 px-3 py-2"
-          />
+}
 
-          <input
-            type="email"
-            value={form.email}
-            onChange={(e) => onChange('email', e.target.value)}
-            placeholder="Email"
-            required
-            className="rounded-lg border border-white/15 bg-slate-900/50 px-3 py-2"
-          />
+}
 
-          <input
-            type="date"
-            value={form.birthDate}
-            onChange={(e) => onChange('birthDate', e.target.value)}
-            required
-            className="rounded-lg border border-white/15 bg-slate-900/50 px-3 py-2"
-          />
+generateAnalysis();
 
-          <input
-            type="time"
-            value={form.birthTime}
-            onChange={(e) => onChange('birthTime', e.target.value)}
-            required
-            className="rounded-lg border border-white/15 bg-slate-900/50 px-3 py-2"
-          />
+},[result,alignmentScore,analysisRequested]);
 
-          <input
-            value={form.birthPlace}
-            onChange={(e) => onChange('birthPlace', e.target.value)}
-            placeholder="Lieu de naissance"
-            required
-            className="rounded-lg border border-white/15 bg-slate-900/50 px-3 py-2 md:col-span-2"
-          />
+async function handleSubmit(e:React.FormEvent){
 
-          <button
-            type="submit"
-            className="primary-btn md:col-span-2"
-          >
-            Recevoir mon analyse approfondie
-          </button>
+e.preventDefault();
 
-        </form>
+if(sending) return;
 
-        {message && (
-          <p className="mt-3 text-sm text-slate-300">
-            {message}
-          </p>
-        )}
+setSending(true);
 
-      </section>
+const data = {
+firstName,
+email,
+birthDay,
+birthMonth,
+birthYear,
+birthHour,
+birthMinute,
+birthPlace,
+score: alignmentScore
+};
 
-      <ShareButtons />
+try{
 
-    </section>
-  );
+await fetch("/api/lead",{
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify(data)
+});
+
+setSubmitted(true);
+
+}catch{
+
+alert("Erreur serveur.");
+
+}
+
+setSending(false);
+
+}
+
+if(submitted){
+
+return(
+
+<main className="flex min-h-screen items-center justify-center px-6 text-center">
+
+<div className="glass-card max-w-xl p-10">
+
+<h2 className="text-3xl font-semibold mb-4">
+✓ Demande envoyée
+</h2>
+
+<p className="text-white/80">
+Votre première lecture personnalisée vous sera envoyée prochainement.
+</p>
+
+</div>
+
+</main>
+
+);
+
+}
+
+return(
+
+<main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-10">
+
+<h1 className="text-4xl font-bold">
+Votre profil décisionnel
+</h1>
+
+<p className="mt-2 text-white/75">
+Analyse générée automatiquement à partir de vos réponses.
+</p>
+
+{result && (
+
+<section className="mt-8 grid gap-6 md:grid-cols-2">
+
+<ResultCard
+profile={result.profile}
+score={alignmentScore}
+/>
+
+<RadarChart
+data={result.radarData}
+/>
+
+</section>
+
+)}
+
+<section className="glass-card mt-8 p-6 text-center">
+
+<p className="text-lg text-white/80">
+Score décisionnel global
+</p>
+
+<p className="mt-2 text-4xl font-bold text-cyan-400">
+{alignmentScore}%
+</p>
+
+<p className="mt-2 text-white/60 text-sm">
+Score moyen des participants : 54 %
+</p>
+
+</section>
+
+<section className="glass-card mt-8 p-6">
+
+<h3 className="text-xl font-semibold mb-3">
+Analyse personnalisée
+</h3>
+
+{!analysis && (
+<p className="text-white/60 italic">
+Analyse en cours… 🔎
+</p>
+)}
+
+{analysis && (
+<p className="text-white/80 leading-relaxed">
+{analysis}
+</p>
+)}
+
+</section>
+
+<section className="mt-12 rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 p-10 text-center shadow-xl">
+
+<h2 className="text-3xl font-semibold mb-4">
+Comprendre vos décisions
+</h2>
+
+<p className="text-white/80 max-w-2xl mx-auto leading-relaxed">
+Au <strong>Cabinet Astrae</strong>, l’étude du thème astral permet
+d’explorer les dynamiques personnelles qui influencent
+les choix de vie et les orientations professionnelles.
+</p>
+
+<p className="mt-6 text-lg text-white font-medium">
+🎁 Recevez <span className="font-bold text-cyan-400">gratuitement</span> votre première lecture personnalisée
+</p>
+
+<form
+onSubmit={handleSubmit}
+className="mt-8 grid gap-4 w-full max-w-md mx-auto"
+>
+
+<input
+type="text"
+placeholder="Votre prénom"
+value={firstName}
+onChange={(e)=>setFirstName(e.target.value)}
+required
+className="w-full rounded-xl bg-white px-4 py-3 text-black outline-none"
+/>
+
+<input
+type="email"
+placeholder="Votre email"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
+required
+className="w-full rounded-xl bg-white px-4 py-3 text-black outline-none"
+/>
+
+<div className="grid grid-cols-3 gap-3">
+
+<input
+type="text"
+inputMode="numeric"
+placeholder="Jour"
+value={birthDay}
+onChange={(e)=>setBirthDay(e.target.value)}
+className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
+/>
+
+<input
+type="text"
+inputMode="numeric"
+placeholder="Mois"
+value={birthMonth}
+onChange={(e)=>setBirthMonth(e.target.value)}
+className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
+/>
+
+<input
+type="text"
+inputMode="numeric"
+placeholder="Année"
+value={birthYear}
+onChange={(e)=>setBirthYear(e.target.value)}
+className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
+/>
+
+</div>
+
+<div className="grid grid-cols-2 gap-3">
+
+<input
+type="text"
+inputMode="numeric"
+placeholder="Heure"
+value={birthHour}
+onChange={(e)=>setBirthHour(e.target.value)}
+className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
+/>
+
+<input
+type="text"
+inputMode="numeric"
+placeholder="Minute"
+value={birthMinute}
+onChange={(e)=>setBirthMinute(e.target.value)}
+className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
+/>
+
+</div>
+
+<input
+type="text"
+placeholder="Ville de naissance"
+value={birthPlace}
+onChange={(e)=>setBirthPlace(e.target.value)}
+className="w-full rounded-xl bg-white px-4 py-3 text-black outline-none"
+/>
+
+<button
+type="submit"
+disabled={!analysis || sending}
+className="mt-2 w-full rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 py-4 text-lg font-semibold text-white disabled:opacity-50"
+>
+{sending ? "Envoi..." : "Recevoir ma première analyse"}
+</button>
+
+</form>
+
+</section>
+
+<section className="mt-12 text-center">
+
+<p className="text-white/70 mb-3">
+Partagez ce diagnostic avec quelqu’un qui traverse peut-être la même situation.
+</p>
+
+<ShareButtons />
+
+</section>
+
+</main>
+
+);
+
 }
