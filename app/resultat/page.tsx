@@ -79,7 +79,7 @@ if(data?.analysis){
 setAnalysis(data.analysis);
 }
 
-}catch(error){
+}catch{
 
 setAnalysis("Analyse indisponible pour le moment.");
 
@@ -90,6 +90,12 @@ setAnalysis("Analyse indisponible pour le moment.");
 generateAnalysis();
 
 },[result,alignmentScore,analysisRequested]);
+
+function onlyNumber(value:string){
+
+return value.replace(/\D/g,"");
+
+}
 
 async function handleSubmit(e:React.FormEvent){
 
@@ -131,41 +137,42 @@ setSending(false);
 
 }
 
-if (submitted) {
+if(submitted){
 
-  return (
+return(
 
-    <main className="flex min-h-screen items-center justify-center px-6 text-center">
+<main className="flex min-h-screen items-center justify-center px-6 text-center">
 
-      <div className="glass-card max-w-xl p-10">
+<div className="glass-card max-w-xl p-10">
 
-        <div className="text-4xl mb-4">
-          ✉️
-        </div>
+<div className="text-4xl mb-4">
+✉️
+</div>
 
-        <h2 className="text-3xl font-semibold mb-3">
-          Demande bien envoyée
-        </h2>
+<h2 className="text-3xl font-semibold mb-3">
+Demande bien envoyée
+</h2>
 
-        <p className="text-white/80 leading-relaxed">
-          Votre demande a été enregistrée avec succès.
-        </p>
+<p className="text-white/80 leading-relaxed">
+Votre demande a été enregistrée avec succès.
+</p>
 
-        <p className="mt-3 text-white/70">
-          Nous préparons actuellement votre première lecture personnalisée.
-        </p>
+<p className="mt-3 text-white/70">
+Nous préparons actuellement votre première lecture personnalisée.
+</p>
 
-        <p className="mt-6 text-sm text-white/60">
-          ⏱️ Vous recevrez votre analyse dans votre boîte email très prochainement.
-        </p>
+<p className="mt-6 text-sm text-white/60">
+⏱️ Vous recevrez votre analyse dans votre boîte email très prochainement.
+</p>
 
-      </div>
+</div>
 
-    </main>
+</main>
 
-  );
+);
 
 }
+
 return(
 
 <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-10">
@@ -270,54 +277,67 @@ required
 className="w-full rounded-xl bg-white px-4 py-3 text-black outline-none"
 />
 
+<p className="text-sm text-white/70 text-left">
+Date de naissance
+</p>
+
 <div className="grid grid-cols-3 gap-3">
 
 <input
 type="text"
 inputMode="numeric"
+maxLength={2}
 placeholder="Jour"
 value={birthDay}
-onChange={(e)=>setBirthDay(e.target.value)}
+onChange={(e)=>setBirthDay(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 <input
 type="text"
 inputMode="numeric"
+maxLength={2}
 placeholder="Mois"
 value={birthMonth}
-onChange={(e)=>setBirthMonth(e.target.value)}
+onChange={(e)=>setBirthMonth(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 <input
 type="text"
 inputMode="numeric"
+maxLength={4}
 placeholder="Année"
 value={birthYear}
-onChange={(e)=>setBirthYear(e.target.value)}
+onChange={(e)=>setBirthYear(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 </div>
+
+<p className="text-sm text-white/70 text-left mt-4">
+Heure de naissance
+</p>
 
 <div className="grid grid-cols-2 gap-3">
 
 <input
 type="text"
 inputMode="numeric"
+maxLength={2}
 placeholder="Heure"
 value={birthHour}
-onChange={(e)=>setBirthHour(e.target.value)}
+onChange={(e)=>setBirthHour(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 <input
 type="text"
 inputMode="numeric"
+maxLength={2}
 placeholder="Minute"
 value={birthMinute}
-onChange={(e)=>setBirthMinute(e.target.value)}
+onChange={(e)=>setBirthMinute(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
@@ -328,6 +348,7 @@ type="text"
 placeholder="Ville de naissance"
 value={birthPlace}
 onChange={(e)=>setBirthPlace(e.target.value)}
+required
 className="w-full rounded-xl bg-white px-4 py-3 text-black outline-none"
 />
 
