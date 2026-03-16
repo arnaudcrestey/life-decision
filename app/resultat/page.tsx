@@ -25,6 +25,8 @@ const [analysisRequested,setAnalysisRequested] = useState(false);
 const [sending,setSending] = useState(false);
 const [submitted,setSubmitted] = useState(false);
 
+const [isMobile,setIsMobile] = useState(false);
+
 useEffect(()=>{
 
 const rawAnswers = localStorage.getItem("quizAnswers");
@@ -32,6 +34,20 @@ const rawAnswers = localStorage.getItem("quizAnswers");
 if(rawAnswers){
 setAnswers(JSON.parse(rawAnswers));
 }
+
+},[]);
+
+useEffect(()=>{
+
+function checkScreen(){
+setIsMobile(window.innerWidth < 640);
+}
+
+checkScreen();
+
+window.addEventListener("resize",checkScreen);
+
+return ()=>window.removeEventListener("resize",checkScreen);
 
 },[]);
 
@@ -145,9 +161,7 @@ return(
 
 <div className="glass-card max-w-xl p-10">
 
-<div className="text-4xl mb-4">
-✉️
-</div>
+<div className="text-4xl mb-4">✉️</div>
 
 <h2 className="text-3xl font-semibold mb-3">
 Demande bien envoyée
@@ -287,8 +301,7 @@ Date de naissance
 type="text"
 inputMode="numeric"
 maxLength={2}
-placeholder="JJ"
-aria-label="Jour"
+placeholder={isMobile ? "JJ" : "Jour"}
 value={birthDay}
 onChange={(e)=>setBirthDay(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
@@ -298,8 +311,7 @@ className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 type="text"
 inputMode="numeric"
 maxLength={2}
-placeholder="MM"
-aria-label="Mois"
+placeholder={isMobile ? "MM" : "Mois"}
 value={birthMonth}
 onChange={(e)=>setBirthMonth(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
@@ -309,14 +321,14 @@ className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 type="text"
 inputMode="numeric"
 maxLength={4}
-placeholder="AAAA"
-aria-label="Année"
+placeholder={isMobile ? "AAAA" : "Année"}
 value={birthYear}
 onChange={(e)=>setBirthYear(onlyNumber(e.target.value))}
 className="rounded-xl bg-white px-4 py-3 text-black text-center outline-none"
 />
 
 </div>
+
 <p className="text-sm text-white/70 text-left mt-4">
 Heure de naissance
 </p>
@@ -367,10 +379,7 @@ className="mt-2 w-full rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 p
 </section>
 
 <section className="mt-12 text-center">
-
-
 <ShareButtons />
-
 </section>
 
 </main>
