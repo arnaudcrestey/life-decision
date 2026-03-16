@@ -7,7 +7,6 @@ type QuizAnswer = {
 };
 
 export async function POST(request: Request) {
-
   try {
 
     const body = await request.json() as { answers?: QuizAnswer[] };
@@ -23,7 +22,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
 
-  } catch {
+  } catch (error) {
+
+    console.error("Erreur diagnostic :", error);
 
     return NextResponse.json(
       { error: "Erreur de traitement du diagnostic" },
@@ -31,7 +32,6 @@ export async function POST(request: Request) {
     );
 
   }
-
 }
 
 export async function PUT(request: Request) {
@@ -47,7 +47,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    const fallback = `Votre score décisionnel est de ${result.score}%.\n\nVotre profil dominant est : ${result.profile.title}. Ce résultat suggère certaines tendances dans votre manière de prendre des décisions. Vous disposez déjà de ressources pour avancer, mais certaines dynamiques personnelles peuvent influencer vos choix.`;
+    const fallback = `Votre score décisionnel est de ${result.score}%.\n\nVotre profil dominant est : ${result.profile.title}. Ce résultat indique certaines tendances dans votre manière de prendre des décisions. Vous disposez déjà de ressources utiles pour avancer, mais certaines dynamiques personnelles peuvent influencer vos choix.`;
 
     const apiKey = process.env.OPENAI_API_KEY;
 
@@ -58,21 +58,39 @@ export async function PUT(request: Request) {
     const prompt = `
 Vous êtes un expert en prise de décision et en psychologie comportementale.
 
-Le score décisionnel exact est : ${result.score}%.
+IMPORTANT
+Le score décisionnel exact de cette personne est : ${result.score}%.
+Ce score doit être repris exactement dans l’analyse.
+
 Profil détecté : ${result.profile.title}
 
-Radar :
+Radar décisionnel :
 ${JSON.stringify(result.radarData)}
 
-Rédigez une analyse courte (60 à 80 mots maximum).
+OBJECTIF
 
-Règles :
+Aider l'utilisateur à comprendre rapidement :
+- sa manière actuelle de prendre des décisions
+- ses forces décisionnelles
+- les mécanismes qui peuvent freiner ses choix
+
+RÈGLES
+
 - Utiliser "vous"
-- Mentionner exactement le score ${result.score}%
-- Ton clair et crédible
-- Expliquer ce que signifie ce score dans la manière de prendre des décisions
+- Ne jamais dire "la personne"
+- Texte naturel et crédible
+- 60 à 80 mots maximum
+- Mentionner exactement ${result.score}%
 
-Terminez par une phrase expliquant que certaines dynamiques décisionnelles peuvent être liées à la personnalité, l’histoire de vie ou les cycles personnels, et mentionnez que le Cabinet Astrae propose une analyse plus approfondie grâce à l’étude du thème astral.
+STRUCTURE
+
+Analyse
+
+Expliquez ce que signifie un score de ${result.score}% dans la prise de décision.
+
+Terminez en expliquant que certaines dynamiques décisionnelles peuvent être liées à la personnalité, à l’histoire de vie ou aux cycles personnels.
+
+Mentionnez que le Cabinet Astrae propose une analyse plus approfondie grâce à l’étude du thème astral.
 `;
 
     const response = await fetch(
@@ -89,7 +107,7 @@ Terminez par une phrase expliquant que certaines dynamiques décisionnelles peuv
             {
               role: "system",
               content:
-                "Tu es un spécialiste de la prise de décision et du comportement humain. Réponds en français, style clair et naturel."
+                "Tu es un spécialiste de la prise de décision et du comportement humain. Réponds en français dans un style clair, naturel et professionnel."
             },
             {
               role: "user",
@@ -102,17 +120,20 @@ Terminez par une phrase expliquant que certaines dynamiques décisionnelles peuv
     );
 
     if (!response.ok) {
+      console.error("Erreur OpenAI :", response.status);
       return NextResponse.json({ analysis: fallback });
     }
 
     const data = await response.json();
 
-    const content =
+    const analysis =
       data?.choices?.[0]?.message?.content?.trim() || fallback;
 
-    return NextResponse.json({ analysis: content });
+    return NextResponse.json({ analysis });
 
-  } catch {
+  } catch (error) {
+
+    console.error("Erreur analyse GPT :", error);
 
     return NextResponse.json({
       analysis:
