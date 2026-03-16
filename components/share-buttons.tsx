@@ -10,7 +10,7 @@ export function ShareButtons() {
   return (
     <section className="glass-card p-5">
       <h3 className="mb-3 text-lg font-semibold">Partager votre résultat</h3>
-      <div className="flex flex-wrap gap-3">
+     <div className="flex flex-wrap justify-center gap-3">
         <a
           className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
