@@ -43,7 +43,7 @@ export default function HomePage() {
         </div>
 
         <Link href="/start" className="primary-btn mt-10">
-          Découvrir mon profil décisionnel
+          Faire le test
         </Link>
 
         <p className="mt-6 text-sm text-slate-400">
