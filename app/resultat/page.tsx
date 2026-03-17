@@ -167,19 +167,19 @@ return(
 <div className="text-4xl mb-4">✉️</div>
 
 <h2 className="text-3xl font-semibold mb-3">
-Demande bien envoyée
+Demande confirmée
 </h2>
 
 <p className="text-white/80 leading-relaxed">
-Votre demande a été enregistrée avec succès.
+Votre demande a bien été enregistrée.
 </p>
 
-<p className="mt-3 text-white/70">
-Votre demande a bien été prise en compte. Votre analyse personnalisée vous sera envoyée très prochainement.
+<p className="mt-4 text-white/70">
+Votre lecture personnalisée vous sera envoyée très prochainement.
 </p>
 
-<p className="mt-6 text-sm text-white/60">
-⏱️ Vous recevrez votre analyse dans votre boîte email très prochainement.
+<p className="mt-6 text-sm text-white/50">
+⏱️ Pensez à vérifier votre boîte email (et vos spams).
 </p>
 
 </div>
