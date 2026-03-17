@@ -57,7 +57,7 @@ export async function POST(request: Request) {
   const htmlContent = `
   <div style="font-family: Arial, sans-serif; line-height:1.6; color:#111;">
 
-    <h2 style="margin-bottom:8px;">🚀 Nouveau lead Life Decision</h2>
+    <h2 style="margin-bottom:8px;"> Nouveau lead Life Decision</h2>
 
     <p style="margin-top:0; color:#555;">
       Un utilisateur vient de compléter le diagnostic.
