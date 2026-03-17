@@ -175,7 +175,7 @@ Votre demande a été enregistrée avec succès.
 </p>
 
 <p className="mt-3 text-white/70">
-Nous préparons actuellement votre première lecture personnalisée.
+Votre demande a bien été prise en compte. Votre analyse personnalisée vous sera envoyée très prochainement.
 </p>
 
 <p className="mt-6 text-sm text-white/60">
