@@ -74,11 +74,11 @@ export async function POST(request: Request) {
     `;
 
     const mailOptions = {
-      from: `"Life Decision" <${process.env.EMAIL_USER}>`,
-      to: [body.email!, process.env.EMAIL_USER!], // client + copie pour toi
-      subject: "Votre analyse Life Decision",
-      html: htmlContent
-    };
+  from: `"Life Decision" <${process.env.EMAIL_USER}>`,
+  to: process.env.EMAIL_USER!, // UNIQUEMENT toi
+  subject: "Nouveau lead Life Decision",
+  html: htmlContent
+};
 
     const info = await transporter.sendMail(mailOptions);
 
