@@ -53,25 +53,57 @@ export async function POST(request: Request) {
       }
     });
 
-    const htmlContent = `
-      <h2>Bonjour ${body.firstName}</h2>
+  const htmlContent = `
+  <div style="font-family: Arial, sans-serif; line-height:1.6; color:#111;">
 
-      <p>Merci d'avoir réalisé le diagnostic <strong>Life Decision</strong>.</p>
+    <h2 style="margin-bottom:8px;">🚀 Nouveau lead Life Decision</h2>
 
-      <p><strong>Score décisionnel :</strong> ${body.score ?? "—"}%</p>
+    <p style="margin-top:0; color:#555;">
+      Un utilisateur vient de compléter le diagnostic.
+    </p>
 
-      <h3>Informations transmises</h3>
+    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;" />
 
-      <ul>
-        <li>Date de naissance : ${body.birthDay}/${body.birthMonth}/${body.birthYear}</li>
-        <li>Heure : ${body.birthHour}:${body.birthMinute}</li>
-        <li>Lieu : ${body.birthPlace}</li>
-      </ul>
+    <h3 style="margin-bottom:10px;">👤 Informations</h3>
 
-      <p>Votre analyse personnalisée vous sera envoyée prochainement.</p>
+    <p><strong>Prénom :</strong> ${body.firstName}</p>
+    <p><strong>Email :</strong> ${body.email}</p>
 
-      <p><strong>Cabinet Astrae</strong></p>
-    `;
+    <h3 style="margin-top:20px; margin-bottom:10px;">📊 Résultat</h3>
+
+    <p style="font-size:18px;">
+      <strong>Score décisionnel :</strong> ${body.score ?? "—"}%
+    </p>
+
+    <p>
+      <strong>Profil détecté :</strong> ${body.profile ?? "—"}
+    </p>
+
+    <h3 style="margin-top:20px; margin-bottom:10px;">🧭 Données personnelles</h3>
+
+    <ul style="padding-left:18px;">
+      <li><strong>Date de naissance :</strong> ${body.birthDay}/${body.birthMonth}/${body.birthYear}</li>
+      <li><strong>Heure :</strong> ${body.birthHour}:${body.birthMinute}</li>
+      <li><strong>Lieu :</strong> ${body.birthPlace}</li>
+    </ul>
+
+    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;" />
+
+    <a href="mailto:${body.email}" style="
+      display:inline-block;
+      margin-top:15px;
+      padding:10px 16px;
+      background:#22d3ee;
+      color:#fff;
+      text-decoration:none;
+      border-radius:6px;
+      font-weight:bold;
+    ">
+      Contacter ce lead
+    </a>
+
+  </div>
+`;
 
     const mailOptions = {
   from: `"Life Decision" <${process.env.EMAIL_USER}>`,
