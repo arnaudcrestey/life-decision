@@ -12,6 +12,7 @@ type LeadPayload = {
   birthMinute: string;
   birthPlace: string;
   score: number;
+  profile: string;
 };
 
 export async function POST(request: Request) {
