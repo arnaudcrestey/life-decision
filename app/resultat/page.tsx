@@ -133,7 +133,8 @@ birthYear,
 birthHour,
 birthMinute,
 birthPlace,
-score: alignmentScore
+score: alignmentScore,
+profile: result?.profile?.title   // 👈 AJOUT ICI
 };
 
 try{
@@ -155,7 +156,6 @@ alert("Erreur serveur.");
 setSending(false);
 
 }
-
 if(submitted){
 
 return(
