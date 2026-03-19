@@ -367,7 +367,10 @@ className="mt-2 w-full rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 p
 </section>
 
 <section className="mt-12 text-center">
-  <ShareButtons profile={profile} score={score} />
+  <ShareButtons
+    profile={result?.profile?.title ?? "Profil décisionnel"}
+    score={alignmentScore}
+  />
 </section>
 
 </main>
