@@ -11,7 +11,7 @@ export function ShareButtons({ profile, score }: ShareButtonsProps) {
       ? `${window.location.origin}/life-decision`
       : 'https://life-decision.vercel.app/life-decision';
 
-  const shareText = `J’ai fait le diagnostic Life Decision. Mon profil décisionnel : ${profile} (${score}%). Un résultat clair et intéressant à découvrir.`;
+  const shareText = `J’ai fait le diagnostic Life Decision. Mon profil décisionnel : ${profile} (${score}%). Découvrez votre propre profil en quelques minutes.`;
 
   const encodedText = encodeURIComponent(shareText);
   const encodedUrl = encodeURIComponent(shareUrl);
@@ -24,38 +24,47 @@ export function ShareButtons({ profile, score }: ShareButtonsProps) {
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      alert('Lien copié avec succès');
+      alert('Message copié avec succès');
     } catch (error) {
       console.error(error);
-      alert('Impossible de copier le lien');
+      alert('Impossible de copier le message');
     }
   }
 
   return (
-    <section className="glass-card p-5">
-      <h3 className="mb-2 text-center text-lg font-semibold text-white">
-        Partager un aperçu de votre résultat
+    <section className="glass-card p-6">
+      <h3 className="mb-2 text-center text-2xl font-semibold text-white">
+        Faire découvrir Life Decision
       </h3>
 
-      <p className="mb-4 text-center text-sm text-slate-300">
-        Partagez une version courte et élégante de votre profil décisionnel.
+      <p className="mx-auto mb-5 max-w-2xl text-center text-sm text-slate-300">
+        Partagez ce diagnostic avec une personne de votre entourage ou sur vos réseaux.
       </p>
+
+      <div className="mx-auto mb-5 max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
+        <p className="mb-2 text-xs uppercase tracking-wide text-cyan-300">
+          Message partagé
+        </p>
+        <p className="text-sm leading-relaxed text-white/80">
+          {shareText}
+        </p>
+      </div>
 
       <div className="flex flex-wrap justify-center gap-3">
         <button
           onClick={copyLink}
           className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
         >
-          Copier le lien
+          Copier le message
         </button>
 
         <a
           className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
-          href={linkedInUrl}
+          href={whatsappUrl}
           target="_blank"
           rel="noreferrer"
         >
-          LinkedIn
+          WhatsApp
         </a>
 
         <a
@@ -69,20 +78,20 @@ export function ShareButtons({ profile, score }: ShareButtonsProps) {
 
         <a
           className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
+          href={linkedInUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          LinkedIn
+        </a>
+
+        <a
+          className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
           href={twitterUrl}
           target="_blank"
           rel="noreferrer"
         >
           Twitter
-        </a>
-
-        <a
-          className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
-          href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          WhatsApp
         </a>
       </div>
     </section>
