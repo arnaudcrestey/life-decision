@@ -43,7 +43,7 @@ export function ShareButtons({ profile, score }: ShareButtonsProps) {
 
       <div className="mx-auto mb-5 max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
         <p className="mb-2 text-xs uppercase tracking-wide text-cyan-300">
-          Message partagé
+          Aperçu du message envoyé
         </p>
         <p className="text-sm leading-relaxed text-white/80">
           {shareText}
